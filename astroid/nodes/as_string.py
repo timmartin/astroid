@@ -607,11 +607,11 @@ class AsStringVisitor:
 
     def visit_matchas(self, node) -> str:
         """Return an astroid.MatchAs node as string."""
-        # pylint: disable=import-outside-toplevel
-        # Prevent circular dependency
-        from astroid.nodes.node_classes import MatchClass, MatchMapping, MatchSequence
-
-        if isinstance(node.parent, (MatchSequence, MatchMapping, MatchClass)):
+        if node.parent.__class__.__name__ in (
+            "MatchSequence",
+            "MatchMapping",
+            "MatchClass",
+        ):
             return node.name.accept(self) if node.name else "_"
         return (
             f"{node.pattern.accept(self) if node.pattern else '_'}"
