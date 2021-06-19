@@ -24,22 +24,13 @@
 # be used with the wrong type anyway because of the visitor pattern.
 # type: ignore
 
-"""This module renders Astroid nodes as string:
-
-* :func:`to_code` function return equivalent (hopefully valid) python string
-
-* :func:`dump` function return an internal representation of nodes found
-  in the tree, useful for debugging or understanding the tree structure
-
-
-
-"""
-
-# pylint: disable=unused-argument
+"""This module renders Astroid nodes as string"""
 
 DOC_NEWLINE = "\0"
 
 
+# Visitor pattern require argument all the time and is not better with staticmethod
+# noinspection PyUnusedLocal,PyMethodMayBeStatic
 class AsStringVisitor:
     """Visitor to render an Astroid node as a valid python code string"""
 
