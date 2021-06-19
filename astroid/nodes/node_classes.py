@@ -54,6 +54,7 @@ from astroid.exceptions import (
     UseInferenceDefault,
 )
 from astroid.manager import AstroidManager
+from astroid.nodes.const import OP_PRECEDENCE
 
 try:
     from typing import Literal
@@ -237,31 +238,6 @@ def _container_getitem(instance, elts, index, context=None):
         ) from exc
 
     raise AstroidTypeError("Could not use %s as subscript index" % index)
-
-
-OP_PRECEDENCE = {
-    op: precedence
-    for precedence, ops in enumerate(
-        [
-            ["Lambda"],  # lambda x: x + 1
-            ["IfExp"],  # 1 if True else 2
-            ["or"],
-            ["and"],
-            ["not"],
-            ["Compare"],  # in, not in, is, is not, <, <=, >, >=, !=, ==
-            ["|"],
-            ["^"],
-            ["&"],
-            ["<<", ">>"],
-            ["+", "-"],
-            ["*", "@", "/", "//", "%"],
-            ["UnaryOp"],  # +, -, ~
-            ["**"],
-            ["Await"],
-        ]
-    )
-    for op in ops
-}
 
 
 class NodeNG:
