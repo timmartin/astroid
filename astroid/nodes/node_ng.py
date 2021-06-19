@@ -8,9 +8,10 @@ import typing
 from functools import singledispatch as _singledispatch
 from typing import ClassVar, Optional
 
-from astroid import as_string, decorators, util
+from astroid import decorators, util
 from astroid.exceptions import AstroidError, InferenceError, UseInferenceDefault
 from astroid.manager import AstroidManager
+from astroid.nodes.as_string import to_code
 from astroid.nodes.const import OP_PRECEDENCE
 
 
@@ -508,7 +509,7 @@ class NodeNG:
         :returns: The source code.
         :rtype: str
         """
-        return as_string.to_code(self)
+        return to_code(self)
 
     def repr_tree(
         self,

@@ -20,28 +20,20 @@
 # Licensed under the LGPL: https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html
 # For details: https://github.com/PyCQA/astroid/blob/master/LICENSE
 
+# Do not add typing as it will create circular import and the function cannot
+# be used with the wrong type anyway because of the visitor pattern.
+# type: ignore
+
 """This module renders Astroid nodes as string:
 
 * :func:`to_code` function return equivalent (hopefully valid) python string
 
 * :func:`dump` function return an internal representation of nodes found
   in the tree, useful for debugging or understanding the tree structure
-"""
-from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:
-    from astroid.nodes.node_classes import (
-        Match,
-        MatchAs,
-        MatchCase,
-        MatchClass,
-        MatchMapping,
-        MatchOr,
-        MatchSequence,
-        MatchSingleton,
-        MatchStar,
-        MatchValue,
-    )
+
+
+"""
 
 # pylint: disable=unused-argument
 
@@ -567,11 +559,11 @@ class AsStringVisitor:
         """return Starred node as string"""
         return "*" + node.value.accept(self)
 
-    def visit_match(self, node: "Match") -> str:
+    def visit_match(self, node) -> str:
         """Return an astroid.Match node as string."""
         return f"match {node.subject.accept(self)}:\n{self._stmt_list(node.cases)}"
 
-    def visit_matchcase(self, node: "MatchCase") -> str:
+    def visit_matchcase(self, node) -> str:
         """Return an astroid.MatchCase node as string."""
         guard_str = f" if {node.guard.accept(self)}" if node.guard else ""
         return (
@@ -579,22 +571,22 @@ class AsStringVisitor:
             f"{self._stmt_list(node.body)}"
         )
 
-    def visit_matchvalue(self, node: "MatchValue") -> str:
+    def visit_matchvalue(self, node) -> str:
         """Return an astroid.MatchValue node as string."""
         return node.value.accept(self)
 
     @staticmethod
-    def visit_matchsingleton(node: "MatchSingleton") -> str:
+    def visit_matchsingleton(node) -> str:
         """Return an astroid.MatchSingleton node as string."""
         return str(node.value)
 
-    def visit_matchsequence(self, node: "MatchSequence") -> str:
+    def visit_matchsequence(self, node) -> str:
         """Return an astroid.MatchSequence node as string."""
         if node.patterns is None:
             return "[]"
         return f"[{', '.join(p.accept(self) for p in node.patterns)}]"
 
-    def visit_matchmapping(self, node: "MatchMapping") -> str:
+    def visit_matchmapping(self, node) -> str:
         """Return an astroid.MatchMapping node as string."""
         mapping_strings = []
         if node.keys and node.patterns:
@@ -606,7 +598,7 @@ class AsStringVisitor:
             mapping_strings.append(f"**{node.rest.accept(self)}")
         return f"{'{'}{', '.join(mapping_strings)}{'}'}"
 
-    def visit_matchclass(self, node: "MatchClass") -> str:
+    def visit_matchclass(self, node) -> str:
         """Return an astroid.MatchClass node as string."""
         if node.cls is None:
             raise Exception(f"{node} does not have a 'cls' node")
@@ -618,11 +610,11 @@ class AsStringVisitor:
                 class_strings.append(f"{attr}={pattern.accept(self)}")
         return f"{node.cls.accept(self)}({', '.join(class_strings)})"
 
-    def visit_matchstar(self, node: "MatchStar") -> str:
+    def visit_matchstar(self, node) -> str:
         """Return an astroid.MatchStar node as string."""
         return f"*{node.name.accept(self) if node.name else '_'}"
 
-    def visit_matchas(self, node: "MatchAs") -> str:
+    def visit_matchas(self, node) -> str:
         """Return an astroid.MatchAs node as string."""
         # pylint: disable=import-outside-toplevel
         # Prevent circular dependency
@@ -635,7 +627,7 @@ class AsStringVisitor:
             f"{f' as {node.name.accept(self)}' if node.name else ''}"
         )
 
-    def visit_matchor(self, node: "MatchOr") -> str:
+    def visit_matchor(self, node) -> str:
         """Return an astroid.MatchOr node as string."""
         if node.patterns is None:
             raise Exception(f"{node} does not have pattern nodes")
