@@ -58,9 +58,9 @@ from astroid.builder import extract_node, parse
 from astroid.const import Context, Del, Load, Store
 from astroid.exceptions import *
 from astroid.inference_tip import _inference_tip_cached, inference_tip
-from astroid.node_classes import are_exclusive, unpack_infer
 from astroid.nodes import *  # pylint: disable=redefined-builtin (Ellipsis)
-from astroid.scoped_nodes import builtin_lookup
+from astroid.nodes.node_classes import are_exclusive, unpack_infer
+from astroid.nodes.scoped_nodes import builtin_lookup
 from astroid.util import Uninferable
 
 # load brain plugins

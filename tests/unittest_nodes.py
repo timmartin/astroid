@@ -45,6 +45,7 @@ from astroid.exceptions import (
     AstroidSyntaxError,
     AttributeInferenceError,
 )
+from astroid.nodes import node_classes
 
 from . import resources
 
@@ -419,8 +420,8 @@ class ImportNodeTest(resources.SysPathSetup, unittest.TestCase):
     def test_from_self_resolve(self):
         namenode = next(self.module.igetattr("NameNode"))
         self.assertTrue(isinstance(namenode, nodes.ClassDef), namenode)
-        self.assertEqual(namenode.root().name, "astroid.node_classes")
-        self.assertEqual(namenode.qname(), "astroid.node_classes.Name")
+        self.assertEqual(namenode.root().name, "astroid.nodes.node_classes")
+        self.assertEqual(namenode.qname(), "astroid.nodes.node_classes.Name")
         self.assertEqual(namenode.pytype(), "%s.type" % BUILTINS)
         abspath = next(self.module2.igetattr("abspath"))
         self.assertTrue(isinstance(abspath, nodes.FunctionDef), abspath)
@@ -451,7 +452,7 @@ class ImportNodeTest(resources.SysPathSetup, unittest.TestCase):
         self.assertEqual(ast.as_string(), "from astroid import modutils")
         ast = self.module["NameNode"]
         self.assertEqual(
-            ast.as_string(), "from astroid.node_classes import Name as NameNode"
+            ast.as_string(), "from astroid.nodes.node_classes import Name as NameNode"
         )
         ast = self.module["os"]
         self.assertEqual(ast.as_string(), "import os.path")

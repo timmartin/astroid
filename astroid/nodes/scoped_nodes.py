@@ -45,7 +45,7 @@ from typing import List, Optional
 from astroid import bases
 from astroid import context as contextmod
 from astroid import decorators as decorators_mod
-from astroid import mixins, node_classes, util
+from astroid import mixins, util
 from astroid.const import BUILTINS, PY39_PLUS
 from astroid.exceptions import (
     AstroidBuildingError,
@@ -60,6 +60,7 @@ from astroid.exceptions import (
 from astroid.interpreter.dunder_lookup import lookup
 from astroid.interpreter.objectmodel import ClassModel, FunctionModel, ModuleModel
 from astroid.manager import AstroidManager
+from astroid.nodes import node_classes
 
 ITER_METHODS = ("__iter__", "__getitem__")
 EXCEPTION_BASE_CLASSES = frozenset({"Exception", "BaseException"})

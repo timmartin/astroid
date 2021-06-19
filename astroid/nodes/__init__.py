@@ -18,12 +18,12 @@
 .. seealso::
     :doc:`ast documentation <green_tree_snakes:nodes>`
 
-All nodes inherit from :class:`~astroid.node_classes.NodeNG`.
+All nodes inherit from :class:`~astroid.nodes.node_classes.NodeNG`.
 """
 
 # Nodes not present in the builtin ast module:  DictUnpack, Unknown, and EvaluatedObject.
 
-from astroid.node_classes import (  # pylint: disable=redefined-builtin (Ellipsis)
+from astroid.nodes.node_classes import (  # pylint: disable=redefined-builtin (Ellipsis)
     AnnAssign,
     Arguments,
     Assert,
@@ -98,7 +98,7 @@ from astroid.node_classes import (  # pylint: disable=redefined-builtin (Ellipsi
     YieldFrom,
     const_factory,
 )
-from astroid.scoped_nodes import (
+from astroid.nodes.scoped_nodes import (
     AsyncFunctionDef,
     ClassDef,
     DictComp,
