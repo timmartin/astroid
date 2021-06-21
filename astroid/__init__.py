@@ -50,6 +50,8 @@ from astroid.__pkginfo__ import __version__, version
 
 # isort: on
 
+from astroid import node_classes  # Deprecated, to remove later
+from astroid import scoped_nodes  # Deprecated, to remove later
 from astroid import inference, raw_building
 from astroid.astroid_manager import MANAGER
 from astroid.bases import BaseInstance, BoundMethod, Instance, UnboundMethod
@@ -58,9 +60,103 @@ from astroid.builder import extract_node, parse
 from astroid.const import Context, Del, Load, Store
 from astroid.exceptions import *
 from astroid.inference_tip import _inference_tip_cached, inference_tip
-from astroid.nodes import *  # pylint: disable=redefined-builtin (Ellipsis)
-from astroid.nodes.node_classes import are_exclusive, unpack_infer
-from astroid.nodes.scoped_nodes import builtin_lookup
+
+# isort: off
+# It's impossible to import from astroid.nodes with a wildcard, because
+# there is a cyclic import that prevent creating an __all__ in astroid/nodes
+# and we need astroid/scoped_nodes and astroid/node_classes to work. So
+# importing with a wildcard would clash with astroid/nodes/scoped_nodes
+# and astroid/nodes/node_classes.
+from astroid.nodes import (  # pylint: disable=redefined-builtin (Ellipsis)
+    CONST_CLS,
+    AnnAssign,
+    Arguments,
+    Assert,
+    Assign,
+    AssignAttr,
+    AssignName,
+    AsyncFor,
+    AsyncFunctionDef,
+    AsyncWith,
+    Attribute,
+    AugAssign,
+    Await,
+    BinOp,
+    BoolOp,
+    Break,
+    Call,
+    ClassDef,
+    Compare,
+    Comprehension,
+    Const,
+    Continue,
+    Decorators,
+    DelAttr,
+    Delete,
+    DelName,
+    Dict,
+    DictComp,
+    DictUnpack,
+    Ellipsis,
+    EmptyNode,
+    EvaluatedObject,
+    ExceptHandler,
+    Expr,
+    ExtSlice,
+    For,
+    FormattedValue,
+    FunctionDef,
+    GeneratorExp,
+    Global,
+    If,
+    IfExp,
+    Import,
+    ImportFrom,
+    Index,
+    JoinedStr,
+    Keyword,
+    Lambda,
+    List,
+    ListComp,
+    Match,
+    MatchAs,
+    MatchCase,
+    MatchClass,
+    MatchMapping,
+    MatchOr,
+    MatchSequence,
+    MatchSingleton,
+    MatchStar,
+    MatchValue,
+    Module,
+    Name,
+    NamedExpr,
+    NodeNG,
+    Nonlocal,
+    Pass,
+    Raise,
+    Return,
+    Set,
+    SetComp,
+    Slice,
+    Starred,
+    Subscript,
+    TryExcept,
+    TryFinally,
+    Tuple,
+    UnaryOp,
+    Unknown,
+    While,
+    With,
+    Yield,
+    YieldFrom,
+    are_exclusive,
+    builtin_lookup,
+    const_factory,
+    unpack_infer,
+)
+
+# isort: on
 from astroid.util import Uninferable
 
 # load brain plugins

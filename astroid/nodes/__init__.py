@@ -24,6 +24,7 @@ All nodes inherit from :class:`~astroid.nodes.node_classes.NodeNG`.
 # Nodes not present in the builtin ast module:  DictUnpack, Unknown, and EvaluatedObject.
 
 from astroid.nodes.node_classes import (  # pylint: disable=redefined-builtin (Ellipsis)
+    CONST_CLS,
     AnnAssign,
     Arguments,
     Assert,
@@ -96,7 +97,9 @@ from astroid.nodes.node_classes import (  # pylint: disable=redefined-builtin (E
     With,
     Yield,
     YieldFrom,
+    are_exclusive,
     const_factory,
+    unpack_infer,
 )
 from astroid.nodes.scoped_nodes import (
     AsyncFunctionDef,
@@ -108,6 +111,7 @@ from astroid.nodes.scoped_nodes import (
     ListComp,
     Module,
     SetComp,
+    builtin_lookup,
 )
 
 ALL_NODE_CLASSES = (
@@ -196,4 +200,11 @@ ALL_NODE_CLASSES = (
 )
 
 # Can't create a proper __all__ with string because of a cyclic import for ClassDef
-__all__ = [c.__name__ for c in ALL_NODE_CLASSES]
+__all__ = [
+    "CONST_CLS",
+    "builtin_lookup",
+    "are_exclusive",
+    "const_factory",
+    "unpack_infer",
+]
+__all__ += [c.__name__ for c in ALL_NODE_CLASSES]
