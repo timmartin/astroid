@@ -10,10 +10,12 @@
 # Copyright (c) 2021 hippo91 <guillaume.peillex@gmail.com>
 
 """Astroid hooks for typing.py support."""
+import itertools
 import typing
 from functools import partial
 
 from astroid import context, extract_node, inference_tip, node_classes
+from astroid.bases import Instance
 from astroid.const import PY37_PLUS, PY39_PLUS
 from astroid.exceptions import (
     AttributeInferenceError,
@@ -351,6 +353,34 @@ def infer_tuple_alias(
     return iter([class_def])
 
 
+def _looks_like_typing_cast(node: Call) -> bool:
+    return isinstance(node, Call) and (
+        isinstance(node.func, Name)
+        and node.func.name == "cast"
+        or isinstance(node.func, Attribute)
+        and node.func.attrname == "cast"
+    )
+
+
+def infer_typing_cast(
+    node: Call, ctx: context.InferenceContext = None
+) -> typing.Union[typing.Iterator[NodeNG], typing.Iterator[Instance]]:
+    """Infer call to cast() returning an instance of the cast-to type"""
+    try:
+        func = next(node.func.infer(context=ctx))
+    except InferenceError as exc:
+        raise UseInferenceDefault from exc
+    if func.qname() != "typing.cast" or len(node.args) != 2:
+        raise UseInferenceDefault
+
+    peek_value_node, value_node = itertools.tee(node.args[1].infer(context=ctx))
+    if next(peek_value_node) is Uninferable:
+        type_node = next(node.args[0].infer(context=ctx))
+        return iter([Instance(type_node)])
+
+    return value_node
+
+
 AstroidManager().register_transform(
     Call,
     inference_tip(infer_typing_typevar_or_newtype),
@@ -358,6 +388,9 @@ AstroidManager().register_transform(
 )
 AstroidManager().register_transform(
     Subscript, inference_tip(infer_typing_attr), _looks_like_typing_subscript
+)
+AstroidManager().register_transform(
+    Call, inference_tip(infer_typing_cast), _looks_like_typing_cast
 )
 
 if PY39_PLUS:

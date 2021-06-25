@@ -7,7 +7,6 @@ What's New in astroid 2.7.0?
 Release date: TBA
 
 
-
 What's New in astroid 2.6.3?
 ============================
 Release date: TBA
@@ -15,6 +14,8 @@ Release date: TBA
 * Fix a crash when the node is a 'Module' in the brain builtin inference
 
   Closes PyCQA/pylint#4671
+
+* Added support to infer return type of typing.cast()
 
 What's New in astroid 2.6.2?
 ============================
