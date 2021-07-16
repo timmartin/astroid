@@ -30,6 +30,7 @@ from astroid.node_classes import (
     Call,
     Const,
     Name,
+    NodeNG,
     Subscript,
 )
 from astroid.scoped_nodes import ClassDef, FunctionDef
