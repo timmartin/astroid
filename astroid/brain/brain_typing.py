@@ -377,6 +377,15 @@ def infer_typing_cast(
     peek_value_node, value_node = itertools.tee(node.args[1].infer(context=ctx))
     if next(peek_value_node) is Uninferable:
         type_node = next(node.args[0].infer(context=ctx))
+
+        if type_node is Uninferable:
+            raise UseInferenceDefault
+
+        if isinstance(type_node, Const):
+            # Casted-to type can be specified as a string, but we don't support
+            # parsing this yet.
+            raise UseInferenceDefault
+
         return iter([Instance(type_node)])
 
     return value_node

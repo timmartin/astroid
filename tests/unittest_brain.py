@@ -1851,6 +1851,40 @@ class TypingBrain(unittest.TestCase):
         assert isinstance(inferred, bases.Instance)
         assert inferred.name == "A"
 
+    def test_typing_cast_string(self):
+        """Cast types specified as a string are not currently inferred"""
+        node = builder.extract_node(
+            """
+        from typing import cast
+
+        b = deserialize()
+        a = cast("dict[str, int]", b)
+        a
+        """
+        )
+        inferred = next(node.infer())
+        self.assertIs(util.Uninferable, inferred)
+
+    def test_typing_cast_typevar(self):
+        """Casting to a typevar is not currently inferred"""
+        node = builder.extract_node(
+            """
+        from typing import cast
+
+        class SomeClass:
+            def some_method():
+                pass
+
+        ClassT = TypeVar("ClassT", bound=SomeClass)
+
+        b = deserialize()
+        a = cast(ClassT, b)
+        a
+        """
+        )
+        inferred = next(node.infer())
+        self.assertIs(util.Uninferable, inferred)
+
 
 class ReBrainTest(unittest.TestCase):
     def test_regex_flags(self):
